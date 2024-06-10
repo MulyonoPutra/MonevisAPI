@@ -1,0 +1,86 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+
+    relationMode = "prisma"
+}
+
+model User {
+    id        Int       @id @default(autoincrement())
+    password  String    @db.VarChar(255)
+    nama      String    @db.VarChar(100)
+    email     String    @db.VarChar(50)
+    createdAt DateTime? @default(now())
+    createdBy String?   @db.VarChar(50)
+    updateAt  DateTime? @default(now())
+    updatedBy String?   @db.VarChar(50)
+
+    groupId Int
+    group   Group @relation(fields: [groupId], references: [id])
+
+    @@index([groupId])
+}
+
+model Group {
+    id         Int       @id @default(autoincrement())
+    namaGroup  String    @db.VarChar(50)
+    kodeGroup  String    @db.VarChar(30)
+    keterangan String    @db.VarChar(100)
+    createdAt  DateTime? @default(now())
+    createdBy  String?   @db.VarChar(50)
+    updateAt   DateTime? @default(now())
+    updatedBy  String?   @db.VarChar(50)
+    users      User[]
+}
+
+model Bulan {
+    id        Int       @id @default(autoincrement())
+    namaBulan String    @db.VarChar(20)
+    createdAt DateTime? @default(now())
+    createdBy String?   @db.VarChar(50)
+    updateAt  DateTime? @default(now())
+    updatedBy String?   @db.VarChar(50)
+
+    realAnggaran RealAnggaran[]
+}
+
+model DaftarUnit {
+    id        Int       @id @default(autoincrement())
+    kodeUnit  String    @db.VarChar(50)
+    namaUnit  String    @db.VarChar(50)
+    type      String    @db.VarChar(50)
+    akroUnit  String    @db.VarChar(50)
+    alamat    String    @db.VarChar(200)
+    telepon   String    @db.VarChar(200)
+    createdAt DateTime? @default(now())
+    createdBy String?   @db.VarChar(50)
+    updateAt  DateTime? @default(now())
+    updatedBy String?   @db.VarChar(50)
+
+    realAnggaran RealAnggaran[]
+}
+
+model RealAnggaran {
+    id Int @id @default(autoincrement())
+
+    anggaran   Decimal
+    real       Decimal
+    keterangan String    @db.VarChar(200)
+    createdAt  DateTime? @default(now())
+    createdBy  String?   @db.VarChar(50)
+    updateAt   DateTime? @default(now())
+    updatedBy  String?   @db.VarChar(50)
+
+    bulanId Int?
+    bulan   Bulan? @relation(fields: [bulanId], references: [id])
+
+    daftarUnitId Int?
+    daftarUnit   DaftarUnit? @relation(fields: [daftarUnitId], references: [id])
+
+    @@index([bulanId])
+    @@index([daftarUnitId])
+}
