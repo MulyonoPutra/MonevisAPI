@@ -13,7 +13,7 @@ model User {
     id        Int       @id @default(autoincrement())
     password  String    @db.VarChar(255)
     nama      String    @db.VarChar(100)
-    email     String    @db.VarChar(50)
+    email     String    @db.VarChar(50) @unique(map: "User_email_key")
     createdAt DateTime? @default(now())
     createdBy String?   @db.VarChar(50)
     updateAt  DateTime? @default(now())

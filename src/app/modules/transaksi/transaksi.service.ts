@@ -55,7 +55,7 @@ export class TransaksiService {
   }
 
   async update(id: number, updateTransaksiDto: UpdateTransaksiDto) {
-    return await this.prismaService.daftarUnit.update({
+    return await this.prismaService.realAnggaran.update({
       data: updateTransaksiDto,
       where: { id },
     });
